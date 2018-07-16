@@ -10,7 +10,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * <p>
  * Unit Test for <code>CallCacheAspectTest</code>.
+ * <p>
+ * The -javaagent:"/path/to/aspectjweaver-version.jar" should be in system env.
  * 
  * @author matafe@gmail.com
  */

@@ -34,8 +34,13 @@ public class AopMethodInvoker implements IMethodInvoker {
     }
 
     @Override
-    public Object invoke() throws Throwable {
-	return pjp.proceed();
+    public Object call() {
+	try {
+	    return pjp.proceed();
+	} catch (Throwable e) {
+	    throw new RuntimeException("Aspect Exception", e);
+	}
+
     }
 
     private String getMethodName(final ProceedingJoinPoint pjp) {

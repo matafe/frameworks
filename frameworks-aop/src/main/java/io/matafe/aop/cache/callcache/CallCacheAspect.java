@@ -6,6 +6,12 @@ import org.aspectj.lang.annotation.Aspect;
 
 import io.matafe.common.cache.callcache.CallCacheService;
 
+/**
+ * Define the Aspect that uses the @<code>CallCachable</code> annotation to do
+ * the caching.
+ * 
+ * @author matafe@gmail.com
+ */
 @Aspect
 public class CallCacheAspect {
 

@@ -55,7 +55,7 @@ public class CallCacheService {
 	    if (result != null) {
 		return result;
 	    } else {
-		result = invoker.invoke();
+		result = invoker.call();
 		cache.put(invoker.getMethodName(), cArgs, result);
 	    }
 	} catch (InvocationTargetException e) {

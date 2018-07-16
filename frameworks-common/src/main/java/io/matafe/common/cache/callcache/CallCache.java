@@ -2,13 +2,14 @@ package io.matafe.common.cache.callcache;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Represents the the call cache.
  * 
  * @author matafe@gmail.com
  */
-public final class CallCache {
+public class CallCache {
 
     /**
      * The cache
@@ -19,7 +20,7 @@ public final class CallCache {
      * Contructor
      */
     public CallCache() {
-	this.cache = new HashMap<>();
+	this.cache = new ConcurrentHashMap<>();
     }
 
     /**

@@ -10,11 +10,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Unit Test for <code>CallCacheProxy</code>.
+ * Unit Test for <code>CallCacheProxyFactory</code>.
  * 
  * @author matafe@gmail.com
  */
-public class CallCacheProxyTest {
+public class CallCacheProxyFactoryTest {
 
     private CallMonitor monitor;
 
@@ -77,20 +77,21 @@ interface Service {
 }
 
 class ServiceImpl implements Service {
+    @Override
     public String process(String str, CallMonitor monitor) {
 	monitor.incrementAndGet();
 	try {
 	    Thread.sleep(100);
 	} catch (InterruptedException e) {
 	    throw new RuntimeException(e);
-	}	
+	}
 	return str + new Date();
     }
 }
 
 class ServiceFactory {
     static Service getCachedService() {
-	return (Service) CallCacheProxy.newInstance(new ServiceImpl());
+	return CallCacheProxyFactory.newInstance(new ServiceImpl(), Service.class);
     }
 
     static Service getService() {

@@ -5,7 +5,7 @@ package io.matafe.common.cache.callcache;
  * 
  * @author matafe@gmail.com
  */
-public class CallCacheHolder {
+class CallCacheHolder {
 
     private static final ThreadLocal<CallCache> THREAD_LOCAL_CACHE = new ThreadLocal<>();
 

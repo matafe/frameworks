@@ -32,7 +32,7 @@ public class ReflectionMethodInvoker implements IMethodInvoker {
     }
 
     @Override
-    public Object invoke() throws Exception {
+    public Object call() throws Exception {
 	return method.invoke(obj, args);
     }
 
