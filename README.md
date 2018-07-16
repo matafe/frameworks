@@ -8,10 +8,10 @@
  
  	mvn clean install
 
-The generated files willbe in `target` folder.	 
+The generated files will be in `target` folder.	 
  
  ### Build with Gradle:
  
  	gradle -x test build
 
-The generated files willbe in `build` folder.	 
+The generated files will be in `build` folder.	 

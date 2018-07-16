@@ -4,27 +4,27 @@
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
 		<groupId>io.matafe</groupId>
 		<artifactId>frameworks</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-	
+
 	<artifactId>frameworks-aop</artifactId>
 	<name>frameworks-aop</name>
 	<packaging>jar</packaging>
 	<url>http://maven.apache.org</url>
-	
+
 	<properties>
 		<aspectj.version>1.9.1</aspectj.version>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>io.matafe</groupId>
 			<artifactId>frameworks-common</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.aspectj</groupId>
@@ -42,7 +42,7 @@
 			<artifactId>junit</artifactId>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -54,10 +54,10 @@
 						-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
 					</argLine>
 					<useSystemClassLoader>true</useSystemClassLoader>
-					<forkMode>always</forkMode>
+					<forkCount>1</forkCount>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-	
+
 </project>

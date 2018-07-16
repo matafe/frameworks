@@ -1,7 +1,32 @@
-description = 'frameworks-aop'
+description = 'Frameworks AOP Utilities'
+
+// for the agentlib for test runtime
+def localMavenRepo = new File(System.getProperty('user.home'), '.m2/repository').absolutePath
+def aspectjVersion = '1.9.1';
+
 dependencies {
     compile project(':frameworks-common')
     compile group: 'org.aspectj', name: 'aspectjrt', version:'1.9.1'
     runtime group: 'org.aspectj', name: 'aspectjweaver', version:'1.9.1'
-    testCompile group: 'junit', name: 'junit', version:'4.12'
+}
+
+	//def aspectjVersion = '1.9.1';
+	//def settingsLocalRepository = "${user.dir}/.m2/repository"
+
+
+
+task hello {
+    doLast {
+        //println "${project.gradle.gradleUserHomeDir}"
+        //def m2_home = "$System.env.M2_HOME"
+        //def localMavenRepo = new File(System.getProperty('user.home'), '.m2/repository').absolutePath
+        //println "${localMavenRepo}"
+    }
+}
+
+test {
+
+    //jvmArgs "-agentlib:hprof=cpu=samples,interval=2,depth=30,thread=y,file=build/profile.hprof"
+	//jvmArgs += "-agentlib:${localMavenRepo}/org/aspectj/aspectjweaver/${aspectjVersion}/aspectjweaver-${aspectjVersion}.jar"
+    //println "============${jvmArgs}"
 }

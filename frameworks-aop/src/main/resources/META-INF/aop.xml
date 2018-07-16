@@ -1,8 +1,8 @@
 <aspectj>
     <aspects>
-        <aspect name="io.matafe.aop.cache.callcache.CallCacheAspect"/>
+        <aspect name="io.matafe.frameworks.aop.cache.callcache.CallCacheAspect"/>
         <weaver>
-            <include within="io.matafe.aop.cache.callcache.*"/>
+            <include within="io.matafe.frameworks.aop.cache.callcache.*"/>
         </weaver>
     </aspects>
 </aspectj>
