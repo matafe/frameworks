@@ -17,4 +17,20 @@ pipeline {
             }
         }        
     }
+	post {
+	    always {
+	        echo 'Pipeline execution finished!'
+	    }
+	    success {
+	        echo 'Pipeline execution finished successful!'
+	    }
+	    failure {
+	        echo 'Pipeline execution failed!'
+	    }
+	    unstable {
+	        echo 'Pipeline execution is unstable!'
+	    }
+	    changed {
+	    }
+	}    
 }

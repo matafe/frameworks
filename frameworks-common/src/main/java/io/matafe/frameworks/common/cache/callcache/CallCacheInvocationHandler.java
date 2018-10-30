@@ -22,7 +22,7 @@ public class CallCacheInvocationHandler implements InvocationHandler {
 
 	Object result = null;
 	try {
-	    CallCacheService.getInstance().cache(new ReflectionMethodInvoker(obj, method, args));
+	    result = CallCacheService.getInstance().cache(new ReflectionMethodInvoker(obj, method, args));
 	} catch (InvocationTargetException e) {
 	    throw e.getTargetException();
 	} catch (Exception e) {
