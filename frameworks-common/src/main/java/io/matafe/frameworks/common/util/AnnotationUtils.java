@@ -49,6 +49,14 @@ public abstract class AnnotationUtils {
 		return annotation;
 	    }
 	}
+	if (!Annotation.class.isAssignableFrom(clazz)) {
+	    for (final Annotation ann : clazz.getAnnotations()) {
+		annotation = findAnnotation(ann.annotationType(), annotationType);
+		if (annotation != null) {
+		    return annotation;
+		}
+	    }
+	}
 	final Class<?> superClass = clazz.getSuperclass();
 	if (superClass == null || superClass == Object.class) {
 	    return null;
