@@ -1,7 +1,10 @@
 package io.matafe.frameworks.common.util;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Objects;
+import java.util.WeakHashMap;
 
 /**
  * Annotation Utility.
@@ -9,6 +12,9 @@ import java.util.Objects;
  * @author matafe@gmail.com
  */
 public abstract class AnnotationUtils {
+
+    /** Annotated Interface cache */
+    private static final Map<Class<?>, Boolean> annotatedInterfaceCache = new WeakHashMap<Class<?>, Boolean>();
 
     /**
      * Find a single {@link Annotation} of {@code annotationType} on the supplied
@@ -62,6 +68,111 @@ public abstract class AnnotationUtils {
 	    return null;
 	}
 	return findAnnotation(superClass, annotationType);
+    }
+
+    /**
+     * Get a single {@link Annotation} of <code>annotationType</code> from the
+     * supplied {@link Method}, traversing its super methods if no annotation can be
+     * found on the given method itself.
+     * <p>
+     * Annotations on methods are not inherited by default, so we need to handle
+     * this explicitly.
+     * 
+     * @param method
+     *            the method to look for annotations on
+     * @param annotationType
+     *            the annotation class to look for
+     * @return the annotation found, or <code>null</code> if none found
+     */
+    public static <A extends Annotation> A findAnnotation(final Method method, final Class<A> annotationType) {
+	Objects.requireNonNull(method, "Method must not be null");
+	if (annotationType == null) {
+	    return null;
+	}
+	A annotation = getAnnotation(method, annotationType);
+	Class<?> cl = method.getDeclaringClass();
+	if (annotation == null) {
+	    annotation = searchOnInterfaces(method, annotationType, cl.getInterfaces());
+	}
+	while (annotation == null) {
+	    cl = cl.getSuperclass();
+	    if (cl == null || cl == Object.class) {
+		break;
+	    }
+	    try {
+		final Method equivalentMethod = cl.getDeclaredMethod(method.getName(), method.getParameterTypes());
+		annotation = getAnnotation(equivalentMethod, annotationType);
+		if (annotation == null) {
+		    annotation = searchOnInterfaces(method, annotationType, cl.getInterfaces());
+		}
+	    } catch (NoSuchMethodException ex) {
+		// We're done...
+	    }
+	    if (annotation == null) {
+		annotation = findAnnotation(cl, annotationType);
+	    }
+	}
+	return annotation;
+    }
+
+    /**
+     * Get a single {@link Annotation} of <code>annotationType</code> from the
+     * supplied {@link Method}.
+     * 
+     * @param method
+     *            the method to look for annotations on
+     * @param annotationType
+     *            the annotation class to look for
+     * @return the annotations found
+     */
+    public static <A extends Annotation> A getAnnotation(Method method, Class<A> annotationType) {
+	A ann = method.getAnnotation(annotationType);
+	if (ann == null) {
+	    for (Annotation metaAnn : method.getAnnotations()) {
+		ann = metaAnn.annotationType().getAnnotation(annotationType);
+		if (ann != null) {
+		    break;
+		}
+	    }
+	}
+	return ann;
+    }
+
+    private static <A extends Annotation> A searchOnInterfaces(Method method, Class<A> annotationType,
+	    Class<?>[] ifcs) {
+	A annotation = null;
+	for (Class<?> iface : ifcs) {
+	    if (isInterfaceWithAnnotatedMethods(iface)) {
+		try {
+		    Method equivalentMethod = iface.getMethod(method.getName(), method.getParameterTypes());
+		    annotation = getAnnotation(equivalentMethod, annotationType);
+		} catch (NoSuchMethodException ex) {
+		    // Skip this interface - it doesn't have the method...
+		}
+		if (annotation != null) {
+		    break;
+		}
+	    }
+	}
+	return annotation;
+    }
+
+    private static boolean isInterfaceWithAnnotatedMethods(Class<?> iface) {
+	synchronized (annotatedInterfaceCache) {
+	    Boolean flag = annotatedInterfaceCache.get(iface);
+	    if (flag != null) {
+		return flag;
+	    }
+	    boolean found = false;
+	    for (Method ifcMethod : iface.getMethods()) {
+		if (ifcMethod.getAnnotations().length > 0) {
+		    found = true;
+		    break;
+		}
+	    }
+	    annotatedInterfaceCache.put(iface, found);
+	    return found;
+	}
     }
 
 }
