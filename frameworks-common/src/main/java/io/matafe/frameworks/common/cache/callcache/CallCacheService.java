@@ -39,7 +39,8 @@ public class CallCacheService {
     /**
      * Returns the cached object after the execution
      * 
-     * @param invoker The invoker
+     * @param invoker
+     *            The invoker
      * 
      * @return The cached object.
      */
@@ -50,13 +51,14 @@ public class CallCacheService {
 	    if (cache == null) {
 		cache = CallCacheHolder.createCallCache();
 	    }
-	    CallCacheArgs cArgs = new CallCacheArgs(invoker.getArgs());
-	    result = cache.get(invoker.getMethodName(), cArgs);
-	    if (result != null) {
-		return result;
-	    } else {
+	    final String className = invoker.getClassName();
+	    final String methodName = invoker.getMethodName();
+	    final CallCacheArgs cacheArgs = new CallCacheArgs(invoker.getArgs());
+	    final CallCacheKey cacheKey = new CallCacheKey(className, methodName, cacheArgs);
+	    result = cache.get(cacheKey);
+	    if (result == null) {
 		result = invoker.call();
-		cache.put(invoker.getMethodName(), cArgs, result);
+		cache.put(cacheKey, result);
 	    }
 	} catch (InvocationTargetException e) {
 	    throw e.getTargetException();

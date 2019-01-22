@@ -36,4 +36,9 @@ public class ReflectionMethodInvoker implements IMethodInvoker {
 	return method.invoke(obj, args);
     }
 
+    @Override
+    public String getClassName() {
+	return obj.getClass().getName();
+    }
+
 }

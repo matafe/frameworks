@@ -2,7 +2,6 @@ package io.matafe.frameworks.common.cache.callcache;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Represents the the call cache.
@@ -14,20 +13,20 @@ public class CallCache {
     /**
      * The cache
      */
-    private final Map<String, Map<CallCacheArgs, Object>> cache;
+    private final Map<CallCacheKey, CallCacheValue> cache;
 
     /**
      * Contructor
      */
     public CallCache() {
-	this.cache = new ConcurrentHashMap<>();
+	this.cache = new HashMap<>();
     }
 
     /**
      * Put a method and its result to a cache.
      * 
-     * @param methodName
-     *            The method name.
+     * @param key
+     *            The cache key.
      * @param args
      *            The method arguments.
      * @param result
@@ -35,29 +34,28 @@ public class CallCache {
      * 
      * @return The result of the method call.
      */
-    public Object put(String methodName, CallCacheArgs args, Object result) {
-	Map<CallCacheArgs, Object> cacheArgs = this.cache.get(methodName);
-	if (cacheArgs == null) {
-	    cacheArgs = new HashMap<>();
-	    this.cache.put(methodName, cacheArgs);
+    public Object put(final CallCacheKey key, final Object result) {
+	CallCacheValue cv = this.cache.get(key);
+	if (cv == null) {
+	    cv = new CallCacheValue(result);
+	    this.cache.put(key, cv);
 	}
-	cacheArgs.put(args, result);
 	return result;
     }
 
     /**
      * Get the result of a method call from the cache.
      * 
-     * @param methodName
-     *            The method name.
+     * @param cacheKey
+     *            The cache key.
      * @param args
      *            The arguments.
      * 
      * @return The result of the method call from the cache.
      */
-    public Object get(String methodName, CallCacheArgs args) {
-	Map<CallCacheArgs, Object> cacheArgs = this.cache.get(methodName);
-	return cacheArgs == null ? null : cacheArgs.get(args);
+    public Object get(final CallCacheKey cacheKey) {
+	final CallCacheValue cv = this.cache.get(cacheKey);
+	return cv == null ? null : cv.getResult();
     }
 
     /**
