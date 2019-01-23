@@ -5,7 +5,7 @@ package io.matafe.frameworks.common.cache.callcache;
  * 
  * @author matafe@gmail.com
  */
-class CallCacheHolder {
+public class CallCacheHolder {
 
     private static final ThreadLocal<CallCache> THREAD_LOCAL_CACHE = new ThreadLocal<>();
 
@@ -17,4 +17,9 @@ class CallCacheHolder {
 	THREAD_LOCAL_CACHE.set(new CallCache());
 	return getCallCache();
     }
+    
+    public static void removeCallCache() {
+	THREAD_LOCAL_CACHE.remove();
+    }
+
 }
