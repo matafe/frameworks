@@ -45,11 +45,25 @@ public class CallCacheService {
      * @return The cached object.
      */
     public Object cache(final IMethodInvoker invoker) throws Throwable {
+	return cache(invoker, new CallCacheConfig(60000L));
+    }
+
+    /**
+     * Returns the cached object after the execution
+     * 
+     * @param invoker
+     *            The invoker
+     * @param cacheConfig
+     *            The cache config
+     * 
+     * @return The cached object.
+     */
+    public Object cache(final IMethodInvoker invoker, final CallCacheConfig cacheConfig) throws Throwable {
 	Object result = null;
 	try {
 	    CallCache cache = CallCacheHolder.getCallCache();
 	    if (cache == null) {
-		cache = CallCacheHolder.createCallCache();
+		cache = CallCacheHolder.createCallCache(cacheConfig);
 	    }
 	    final String className = invoker.getClassName();
 	    final String methodName = invoker.getMethodName();

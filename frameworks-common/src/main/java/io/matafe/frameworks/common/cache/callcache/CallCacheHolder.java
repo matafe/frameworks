@@ -13,8 +13,8 @@ public class CallCacheHolder {
 	return THREAD_LOCAL_CACHE.get();
     }
 
-    public static CallCache createCallCache() {
-	THREAD_LOCAL_CACHE.set(new CallCache());
+    public static CallCache createCallCache(final CallCacheConfig cacheConfig) {
+	THREAD_LOCAL_CACHE.set(new CallCache(cacheConfig));
 	return getCallCache();
     }
     
